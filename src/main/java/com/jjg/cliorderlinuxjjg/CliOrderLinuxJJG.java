@@ -4,6 +4,7 @@
  */
 package com.jjg.cliorderlinuxjjg;
 
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Scanner;
@@ -18,8 +19,14 @@ public class CliOrderLinuxJJG {
 
     private static boolean Order;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED_ERROR = "\u001B[31m";
+    public static final String ANSI_YELLOW_ANSWER = "\u001B[33m";
+    public static final String ANSI_GREEN_DEFAULT = "\u001B[32m";
+
     public static void main(String[] args) {
         int choice;
+        String choiceX;
         Scanner scanner = new Scanner(System.in);
 
         java.util.Date date = null;
@@ -38,20 +45,18 @@ public class CliOrderLinuxJJG {
         if (os.contains("win")) {
             System.out.println("Operating System (OS): Microsoft Windows");
         } else if (os.contains("nix") || os.contains("nux")) {
-            System.out.println("Operating System (OS): Linux or Unix");
+            System.out.println(ANSI_GREEN_DEFAULT + "Operating System (OS): Linux or Unix" + ANSI_RESET);
         } else if (os.contains("mac")) {
             System.out.println("Operating System (OS): macOS");
         } else {
             System.out.println("Unknown computer operating system (OS)");
         }
-        
-        
 
         try {
 
             do {
-                System.out.println("Welcome to the Application!!!");
-                System.out.println("\nMenu:");
+                System.out.println( ANSI_GREEN_DEFAULT + "Welcome to the Application!!!" + ANSI_RESET);
+                System.out.println( ANSI_GREEN_DEFAULT + "\nMenu:" + ANSI_RESET);
                 System.out.println("1. Set Date and Time");
                 System.out.println("2. Set Take in restaurant or takeaway");
                 System.out.println("3. Set Table number");
@@ -64,8 +69,24 @@ public class CliOrderLinuxJJG {
                 System.out.println("10. Set Request");
                 System.out.println("11. Exit");
                 System.out.print("Select an option: ");
-                choice = Integer.parseInt(scanner.nextLine());
 
+                choiceX = scanner.nextLine();
+                if (choiceX.toLowerCase().equals("x")) {
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                    System.out.println("Thanks for using this application!!!");
+                    break;
+                } else if (choiceX.toLowerCase().equals("a")) {
+                    System.out.println("Developer Name: Julian Jimenez Garcia");
+                    System.out.println("App Name: CliOderLinuxJJG");
+                    System.out.println("Version: 1.0");
+                    break;
+                }else{
+                    System.out.println("ERROR");
+                }
+
+
+                choice = Integer.parseInt(scanner.nextLine());
                 switch (choice) {
                     case 1:
                         long millis = System.currentTimeMillis();
@@ -118,11 +139,17 @@ public class CliOrderLinuxJJG {
                     case 8:
                         System.out.print("Payment method (in cash or by credit card 'cash' or 'card'): ");
                         paymentCustomer = scanner.nextLine();
+                        if (!(paymentCustomer.equals("cash") || paymentCustomer.equals("card"))) {
+                            System.out.println("Invalid payment method");
+                        }
                         break;
                     case 9:
-                        System.out.print("Tipping: ");
+                        System.out.print("Tipping: 5%,10%, 15% or 20%");
                         tipping = scanner.nextInt();
                         scanner.nextLine();
+                        if (!((tipping <= 5) && tipping >= 10 && tipping <= 15 && tipping <= 20)) {
+
+                        }
                         break;
                     case 10:
                         System.out.print("Request (yes/no): ");
@@ -136,19 +163,6 @@ public class CliOrderLinuxJJG {
                 }
             } while (choice != 11);
 
-            System.out.println("Order Summary:");
-            System.out.println("Date: " + date);
-            System.out.println("Take in restaurant or takeaway: " + takeOrRest);
-            System.out.println("Table number: " + tableNumber);
-            System.out.println("Customer name: " + customerName);
-            System.out.println("Email: " + emailCustomer);
-            System.out.println("Comments: " + customerComments);
-            System.out.println("Grand Total: " + grandTotal);
-            System.out.println("Payment method: " + paymentCustomer);
-            System.out.println("Tipping: " + tipping);
-            System.out.println("Request: " + request);
-
-            System.out.println("Thanks to use the Aplication!!!");
 
         } catch (NumberFormatException numberFormatException) {
             System.out.println("Invalid data input. Please try again.");
